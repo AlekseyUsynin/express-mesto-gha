@@ -1,37 +1,34 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const path = require('path');
-
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const path = require("path");
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
+//static зайдет в папку public, найдет там index.html и запустит его.
+app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://localhost:27017/mestodb', {
-  useNewUrlParser: true
+mongoose.connect("mongodb://localhost:27017/mestodb", {
+  useNewUrlParser: true,
   // useCreateIndex: true,
   // useFindAndModify: false
 });
 
-app.get('/users', (req, res) => {
-  if (!users[req.params.id]) {
-    res.send({ error: 'Такого пользователя нет' });
-    return;
-  }
-  res.send(users)
+app.get("/users", (req, res) => {
+  res.send("запрос прощел");
 });
 
-app.get('/users/:userID', (req, res) => {
-  res.send(req.params.id)
+app.get("/users/:userID", (req, res) => {
+  res.send(req.params.id);
 });
 
-app.post('/users', (req, res) => {
+app.post("/users", (req, res) => {
   const { name, about } = req.body;
   res.send(`Имя: ${name}, обо мне: ${about}`);
 });
 
-app.listen(PORT);
+app.listen(PORT, () => console.log("started!"));
