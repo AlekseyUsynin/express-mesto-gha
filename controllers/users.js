@@ -25,7 +25,6 @@ module.exports.createUser = (req, res) => {
           message: "Переданы не верные данные пользователя",
         });
       }
-
-      return res.send({ message: "Произошла ошибка" });
+      return res.status(500).send({ message: "Произошла ошибка" });
     });
 };

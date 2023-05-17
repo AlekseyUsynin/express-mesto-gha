@@ -1,6 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const path = require("path");
 const router = require("./routes/router");
 
@@ -10,13 +10,14 @@ const app = express();
 
 //static зайдет в папку public, найдет там index.html и запустит его.
 app.use(express.static(path.join(__dirname, "public")));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect("mongodb://localhost:27017/mestodb", {
+// Не раблотает с порта mongodb://localhost:27017, пробую это решение: https://www.mongodb.com/community/forums/t/mongooseserverselectionerror-connect-econnrefused-127-0-0-1-27017/123421/2
+mongoose.connect("mongodb://127.0.0.1/mestodb", {
   useNewUrlParser: true,
   // useCreateIndex: true,
-  // useFindAndModify: false
+  // useFindAndModify: false,
 });
 
 app.use("/", router);
