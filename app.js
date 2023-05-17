@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const path = require("path");
+const router = require("./routes/router");
 
 const { PORT = 3000 } = process.env;
 
@@ -18,17 +19,19 @@ mongoose.connect("mongodb://localhost:27017/mestodb", {
   // useFindAndModify: false
 });
 
-app.get("/users", (req, res) => {
-  res.send("запрос прощел");
-});
+app.use("/", router);
 
-app.get("/users/:userID", (req, res) => {
-  res.send(req.params.id);
-});
+// app.get("/users", (req, res) => {
+//   res.send("запрос прощел");
+// });
 
-app.post("/users", (req, res) => {
-  const { name, about } = req.body;
-  res.send(`Имя: ${name}, обо мне: ${about}`);
-});
+// app.get("/users/:userID", (req, res) => {
+//   res.send(req.params.id);
+// });
+
+// app.post("/users", (req, res) => {
+//   const { name, about } = req.body;
+//   res.send(`Имя: ${name}, обо мне: ${about}`);
+// });
 
 app.listen(PORT, () => console.log("started!"));
