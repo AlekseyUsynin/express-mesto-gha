@@ -14,3 +14,15 @@ module.exports.createCard = (req, res) => {
     .then((card) => {res.send({ data: card })})
     .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
 };
+
+module.exports.deleteCard = (req, res) => {
+  const { cardId } = req.params
+  CardSchema.findById(cardId)
+    .then((card) => {
+      if (!card) {
+        return res.status(404).send({message: 'Карточка с таким id не найдена'})
+      }
+      return card.deleteOne().then(() => res.send({ message: 'Карточка удалена' }));
+    })
+    .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
+};
