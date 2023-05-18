@@ -21,19 +21,15 @@ mongoose.connect("mongodb://127.0.0.1:27017/mestodb", {
   // useFindAndModify: false,
 });
 
+app.use((req, res, next) => {
+  req.user = {
+    _id: '6465bcdc3c6630efca837c2a' // _id пользователя
+  };
+
+  next();
+});
+
 app.use(router);
 
-// app.get("/users", (req, res) => {
-//   res.send("запрос прощел");
-// });
-
-// app.get("/users/:userID", (req, res) => {
-//   res.send(req.params.id);
-// });
-
-// app.post("/users", (req, res) => {
-//   const { name, about } = req.body;
-//   res.send(`Имя: ${name}, обо мне: ${about}`);
-// });
 
 app.listen(PORT, () => console.log("started!"));
