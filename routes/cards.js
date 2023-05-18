@@ -8,4 +8,8 @@ router.delete("/cards/:cardId", deleteCard);
 router.put("/cards/:cardId/likes", likeCard);
 router.delete("/cards/:cardId/likes", dislikeCard);
 
+router.use((req, res ) => {
+  res.send('Такой страницы нет');
+});
+
 module.exports = router
