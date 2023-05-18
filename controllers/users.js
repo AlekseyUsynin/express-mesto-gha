@@ -8,17 +8,14 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUserId = (req, res) => {
-  const { userId } = req.params
+  const { userId } = req.params;
   UserSchema
-    // .find({_id: userId})
-    .findById(userId)
+    .find({_id: userId})
+    // .findById(userId)
     .then((user) => {
-      if (!user) {
-        return res.status(404).send({message: 'Пользователь по указанному _id не найден.'})
-      }
-      res.send(user)
+        res.send(user)
     })
-    .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
+    .catch((err) => res.status(404).send({message: 'Пользователь по указанному _id не найден.'}));
 };
 
 module.exports.createUser = (req, res) => {
