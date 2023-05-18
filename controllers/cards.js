@@ -4,7 +4,7 @@ module.exports.getCards = (req, res) => {
   CardSchema
     .find({})
     .then((cards) => res.send(cards))
-    .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
+    .catch((err) => res.status(400).send({message: 'Ошибка сервера!'}));
 };
 
 module.exports.createCard = (req, res) => {
@@ -12,7 +12,7 @@ module.exports.createCard = (req, res) => {
   CardSchema
     .create({ name, link, owner: req.user._id })
     .then((card) => {res.send({ data: card })})
-    .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
+    .catch((err) => res.status(400).send({message: 'Ошибка сервера!'}));
 };
 
 module.exports.deleteCard = (req, res) => {
@@ -24,7 +24,7 @@ module.exports.deleteCard = (req, res) => {
       }
       return card.deleteOne().then(() => res.send({ message: 'Карточка удалена' }));
     })
-    .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
+    .catch((err) => res.status(400).send({message: 'Ошибка сервера!'}));
 };
 
 module.exports.likeCard = (req, res) => CardSchema.findByIdAndUpdate(
@@ -38,7 +38,7 @@ module.exports.likeCard = (req, res) => CardSchema.findByIdAndUpdate(
     }
     res.send({ data: card });
   })
-  .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
+  .catch((err) => res.status(400).send({message: 'Ошибка сервера!'}));
 
 module.exports.dislikeCard = (req, res) => CardSchema.findByIdAndUpdate(
   req.params.cardId,
@@ -51,4 +51,4 @@ module.exports.dislikeCard = (req, res) => CardSchema.findByIdAndUpdate(
     }
     res.send({ data: card });
   })
-  .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
+  .catch((err) => res.status(400).send({message: 'Ошибка сервера!'}));
