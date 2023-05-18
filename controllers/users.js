@@ -10,17 +10,20 @@ module.exports.getUsers = (req, res) => {
 module.exports.getUserId = (req, res) => {
   const { userId } = req.params;
   UserSchema
-    .find({_id: userId})
-    // .findById(userId)
+    // .find(userId)
+    .findById(userId)
     .then((user) => {
-      if (user) {
-        res.send(user)
-      } else {
+      if (!user) {
         return res.status(400).send({message: 'Не указано ID пользователя'})
       }
+      res.send(user)
     })
-    .catch((err) => res.status(400).send({message: 'Пользователь по указанному _id не найден.'}));
-};
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({message: 'Пользователь по указанному _id не найден.'})
+      }
+    })
+  };
 
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
