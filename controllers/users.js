@@ -41,17 +41,8 @@ module.exports.createUser = (req, res) => {
 module.exports.updateUser = (req, res) => {
   const { name, about } = req.body;
   UserSchema
-    .findByIdAndUpdate(
-      req.user._id,
-      { name, about },
-      { new: true },
-    )
-    .then((user) => {
-      if (!user) {
-        return res.status(400).send({message: 'Пользователь не найден'})
-      }
-      res.send(user)
-    })
+    .findByIdAndUpdate(req.user._id, { name, about }, { new: true })
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(400).send({message: 'Переданы некорректные данные при создании пользователя'});
