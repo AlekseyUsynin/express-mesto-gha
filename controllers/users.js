@@ -46,7 +46,12 @@ module.exports.updateUser = (req, res) => {
       { name, about },
       { new: true },
     )
-    .then((user) => res.status(200).send(user))
+    .then((user) => {
+      if (!user) {
+        return res.status(400).send({message: 'Пользователь не найден'})
+      }
+      res.send(user)
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(400).send({message: 'Переданы некорректные данные при создании пользователя'});
@@ -63,7 +68,12 @@ module.exports.updateAvatar = (req, res) => {
       { avatar },
       { new: true },
     )
-    .then((user) => res.status(200).send(user))
+    .then((user) => {
+      if (!user) {
+        return res.status(400).send({message: 'Пользователь не найден'})
+      }
+      res.status(200).send(user)
+    })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
         res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' });
