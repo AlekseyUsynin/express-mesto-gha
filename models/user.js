@@ -19,6 +19,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-});
+
+  // versionKey: false,
+},
+
+// удаляем версию внутри объекта:
+// https://stackoverflow.com/questions/12495891/what-is-the-v-field-in-mongoose
+{
+  versionKey: false,
+}
+);
+
+
 
 module.exports = mongoose.model("user", userSchema);

@@ -13,9 +13,13 @@ module.exports.getUserId = (req, res) => {
     .find({_id: userId})
     // .findById(userId)
     .then((user) => {
+      if (user) {
         res.send(user)
+      } else {
+        return res.status(400).send({message: 'Не указано ID пользователя'})
+      }
     })
-    .catch((err) => res.status(404).send({message: 'Пользователь по указанному _id не найден.'}));
+    .catch((err) => res.status(400).send({message: 'Пользователь по указанному _id не найден.'}));
 };
 
 module.exports.createUser = (req, res) => {
