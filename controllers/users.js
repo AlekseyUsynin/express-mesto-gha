@@ -65,7 +65,11 @@ module.exports.updateUser = (req, res) => {
 
 module.exports.updateAvatar = (req, res) => {
   const { avatar } = req.body;
-  UserSchema.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
+  UserSchema.findByIdAndUpdate(
+    req.user._id,
+    { avatar },
+    { new: true, runValidators: true }
+  )
     .then((user) => {
       res.status(200).send({ data: user, log: req.user._id });
     })
