@@ -40,15 +40,21 @@ module.exports.createUser = (req, res) => {
 
 module.exports.updateUser = (req, res) => {
   const { name, about } = req.body;
-  UserSchema
-    .findByIdAndUpdate(req.user._id, { name, about }, { new: true })
-    .then((user) => res.send(user))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({message: 'Переданы некорректные данные при создании пользователя'});
+  UserSchema.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Пользователь по указанному _id не найден');
       }
-      res.status(500).send({message: 'Ошибка сервера!'})
+      return res.status(200).send({ data: user });
+    })
+    .catch((err) => {
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
+        return res.status(400).send({message: 'Переданы некорректные данные при создании пользователя'});
+      } else {
+        res.status(500).send({message: 'Ошибка сервера!'})
+      }
     });
+
 };
 
 module.exports.updateAvatar = (req, res) => {
