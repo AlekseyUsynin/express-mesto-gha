@@ -2,7 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const path = require("path");
-const router = require("./routes/router");
+const userRoutes = require("./routes/users");
+const cardRoutes = require("./routes/cards");
+
 
 const { PORT = 3000 } = process.env;
 
@@ -29,7 +31,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(router);
+app.use(userRoutes);
+app.use(cardRoutes);
 
 
 app.listen(PORT, () => console.log("started!"));

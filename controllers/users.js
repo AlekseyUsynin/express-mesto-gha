@@ -14,7 +14,7 @@ module.exports.getUserId = (req, res) => {
     .findById(userId)
     .then((user) => {
       if (!user) {
-        return res.status(404).send({message: 'Пользователь не найден'})
+        return res.status(404).send({message: 'Пользователь по указанному _id не найден.'})
       }
       res.send(user)
     })
@@ -26,7 +26,12 @@ module.exports.createUser = (req, res) => {
   UserSchema
     .create({ name, about, avatar })
     .then((user) => {res.send({ data: user })})
-    .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({message: 'Переданы некорректные данные при создании пользователя'});
+      }
+      res.status(500).send({message: 'Ошибка сервера!'})
+    });
 };
 
 module.exports.updateUser = (req, res) => {
@@ -39,11 +44,16 @@ module.exports.updateUser = (req, res) => {
     )
     .then((user) => {
       if (!user) {
-        return res.status(404).send({message: 'Пользователь не найден'})
+        return res.status(400).send({message: 'Пользователь не найден'})
       }
       res.send(user)
     })
-    .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({message: 'Переданы некорректные данные при создании пользователя'});
+      }
+      res.status(500).send({message: 'Ошибка сервера!'})
+    });
 };
 
 module.exports.updateAvatar = (req, res) => {
@@ -56,9 +66,14 @@ module.exports.updateAvatar = (req, res) => {
     )
     .then((user) => {
       if (!user) {
-        return res.status(404).send({message: 'Пользователь не найден'})
+        return res.status(400).send({message: 'Пользователь не найден'})
       }
       res.send(user)
     })
-    .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return res.status(400).send({message: 'Переданы некорректные данные при создании пользователя'});
+      }
+      res.status(500).send({message: 'Ошибка сервера!'})
+    });
 };
