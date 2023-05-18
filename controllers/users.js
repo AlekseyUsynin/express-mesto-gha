@@ -60,16 +60,12 @@ module.exports.updateUser = (req, res) => {
 module.exports.updateAvatar = (req, res) => {
   const { avatar } = req.body;
   UserSchema
-    .findByIdAndUpdate(
-      req.user._id,
-      { avatar },
-      { new: true },
-    )
+    .findByIdAndUpdate(req.user._id, { avatar }, { new: true })
     .then((user) => {
       if (!user) {
-        return res.status(400).send({message: 'Пользователь не найден'})
+        throw new NotFoundError('Пользователь по указанному _id не найден');
       }
-      res.status(200).send(user)
+      return res.status(200).send({ data: user })
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
