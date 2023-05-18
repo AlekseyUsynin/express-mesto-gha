@@ -9,7 +9,7 @@ router.put("/cards/:cardId/likes", likeCard);
 router.delete("/cards/:cardId/likes", dislikeCard);
 
 router.use((req, res ) => {
-  res.send('Такой страницы нет');
+  return res.status(404).send({message: 'Такой страницы нет'})
 });
 
 module.exports = router
