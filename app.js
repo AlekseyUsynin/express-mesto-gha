@@ -31,8 +31,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(userRoutes);
-app.use(cardRoutes);
+app.use('/', userRoutes);
+app.use('/', cardRoutes);
 
 
 app.listen(PORT, () => console.log("started!"));
