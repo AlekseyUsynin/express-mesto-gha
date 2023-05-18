@@ -1,14 +1,14 @@
-const userSchema = require("../models/user");
+const UserSchema = require("../models/user");
 
 module.exports.getUsers = (req, res) => {
-  userSchema
+  UserSchema
     .find({})
     .then((users) => res.send(users))
-    .catch(err);
+    .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
 };
 
 module.exports.getUserId = (req, res) => {
-  userSchema
+  UserSchema
     .findById(req.params.userId)
     .then((user) => res.send(user))
     .catch(err);
@@ -16,7 +16,7 @@ module.exports.getUserId = (req, res) => {
 
 module.exports.createUser = (req, res) => {
   const { name, about, avatar } = req.body;
-  userSchema
+  UserSchema
     .create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
     .catch((err) => {

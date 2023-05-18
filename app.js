@@ -13,14 +13,15 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Не раблотает с порта mongodb://localhost:27017, пробую это решение: https://www.mongodb.com/community/forums/t/mongooseserverselectionerror-connect-econnrefused-127-0-0-1-27017/123421/2
+// Не раблотает с порта mongodb://localhost:27017
+// решение: https://www.mongodb.com/community/forums/t/mongooseserverselectionerror-connect-econnrefused-127-0-0-1-27017/123421/2
 mongoose.connect("mongodb://127.0.0.1:27017/mestodb", {
   useNewUrlParser: true,
   // useCreateIndex: true,
   // useFindAndModify: false,
 });
 
-app.use("/", router);
+app.use(router);
 
 // app.get("/users", (req, res) => {
 //   res.send("запрос прощел");
