@@ -26,3 +26,29 @@ module.exports.deleteCard = (req, res) => {
     })
     .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
 };
+
+module.exports.likeCard = (req, res) => CardSchema.findByIdAndUpdate(
+  req.params.cardId,
+  { $addToSet: { likes: req.user._id } },
+  { new: true },
+)
+  .then((card) => {
+    if (!card) {
+      return res.status(404).send({message: 'Карточка с таким id не найдена'})
+    }
+    res.send({ data: card });
+  })
+  .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
+
+module.exports.dislikeCard = (req, res) => CardSchema.findByIdAndUpdate(
+  req.params.cardId,
+  { $pull: { likes: req.user._id } },
+  { new: true },
+)
+  .then((card) => {
+    if (!card) {
+      return res.status(404).send({message: 'Карточка с таким id не найдена'})
+    }
+    res.send({ data: card });
+  })
+  .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
