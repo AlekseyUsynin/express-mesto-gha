@@ -75,9 +75,10 @@ module.exports.updateAvatar = (req, res) => {
       res.send(user)
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return res.status(400).send({message: 'Переданы некорректные данные при создании пользователя'});
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
+        res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' });
+      } else {
+        res.status(500).send({ message: err.message });
       }
-      res.status(500).send({message: 'Ошибка сервера!'})
     });
 };
