@@ -8,10 +8,16 @@ module.exports.getUsers = (req, res) => {
 };
 
 module.exports.getUserId = (req, res) => {
+  const { userId } = req.params
   UserSchema
-    .findById(req.params.userId)
-    .then((user) => res.send(user))
-    .catch(err);
+    .find({_id: userId})
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({message: 'Пользователь не найден'})
+      }
+      res.send(user)
+    })
+    .catch((err) => res.status(500).send({message: 'Ошибка сервера!'}));
 };
 
 module.exports.createUser = (req, res) => {
