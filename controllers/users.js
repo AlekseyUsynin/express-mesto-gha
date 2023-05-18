@@ -67,10 +67,7 @@ module.exports.updateAvatar = (req, res) => {
   const { avatar } = req.body;
   UserSchema.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
     .then((user) => {
-      if (!user) {
-        throw new NotFoundError("Пользователь по указанному _id не найден");
-      }
-      return res.status(200).send({ data: user });
+      res.status(200).send({ data: user });
     })
     .catch((err) => {
       if (err.name === "CastError" || err.name === "ValidationError") {
