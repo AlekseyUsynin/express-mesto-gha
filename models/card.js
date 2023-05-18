@@ -28,6 +28,13 @@ const cardSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-});
+},
+
+// удаляем версию внутри объекта:
+// https://stackoverflow.com/questions/12495891/what-is-the-v-field-in-mongoose
+{
+  versionKey: false,
+}
+);
 
 module.exports = mongoose.model("card", cardSchema);
