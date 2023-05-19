@@ -1,4 +1,5 @@
 const UserSchema = require("../models/user");
+const NotFoundError = require("../errors/notFoundError");
 
 module.exports.getUsers = (req, res) => {
   UserSchema
@@ -62,10 +63,10 @@ module.exports.updateAvatar = (req, res) => {
   UserSchema
     .findByIdAndUpdate(req.user._id, { avatar }, { new: true })
     .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь по указанному _id не найден');
-      }
-      return res.status(200).send({ data: user })
+      // if (!user) {
+      //   throw new NotFoundError('Пользователь по указанному _id не найден');
+      // }
+      return res.status(200).send({ data: user, id: req.user._id })
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
