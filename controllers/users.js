@@ -45,12 +45,16 @@ module.exports.createUser = (req, res) => {
 
 module.exports.updateUser = (req, res) => {
   const { name, about } = req.body;
-  UserSchema.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
+  UserSchema.findByIdAndUpdate(
+    req.user._id,
+    { name, about },
+    { new: true, runValidators: true }
+  )
     .then((user) => {
       if (!user) {
-        throw new NotFoundError("Пользователь по указанному _id не найден");
+        return res.status(400).send({ message: "Пользователь не найден." });
       }
-      return res.status(200).send({ data: user });
+      res.send({ user });
     })
     .catch((err) => {
       if (err.name === "CastError" || err.name === "ValidationError") {
@@ -71,7 +75,10 @@ module.exports.updateAvatar = (req, res) => {
     { new: true, runValidators: true }
   )
     .then((user) => {
-      res.status(200).send({ data: user, log: req.user._id });
+      if (!user) {
+        return res.status(400).send({ message: "Пользователь не найден." });
+      }
+      res.send({ user });
     })
     .catch((err) => {
       if (err.name === "CastError" || err.name === "ValidationError") {
