@@ -27,7 +27,7 @@ mongoose.connect(
 
 app.use((req, res, next) => {
   req.user = {
-    _id: "646632f4bb035b45c83142d0", // _id пользователя
+    _id: "6466a4524fabe46bb929c0cd", // _id пользователя
   };
   next();
 });
