@@ -62,15 +62,10 @@ module.exports.updateAvatar = (req, res) => {
   const { avatar } = req.body;
   UserSchema
     .findByIdAndUpdate(req.user._id, { avatar }, { new: true })
-    .then((user) => {
-      // if (!user) {
-      //   throw new NotFoundError('Пользователь по указанному _id не найден');
-      // }
-      return res.status(200).send({ data: user, id: req.user._id })
-    })
+    .then((user) => res.status(200).send({user, log: req.user._id}))
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' });
+        res.status(400).send({ message: 'Введены не верные данные для обновления аватара' });
       } else {
         res.status(500).send({ message: err.message });
       }
