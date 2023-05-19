@@ -1,5 +1,4 @@
 const UserSchema = require("../models/user");
-const NotFoundError = require("../errors/notFoundError.js");
 
 module.exports.getUsers = (req, res) => {
   UserSchema.find({})
@@ -9,9 +8,7 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUserId = (req, res) => {
   const { userId } = req.params;
-  UserSchema
-    // .find(userId)
-    .findById(userId)
+  UserSchema.findById(userId)
     .then((user) => {
       if (!user) {
         return res.status(404).send({ message: "Не указано ID пользователя" });
@@ -54,12 +51,13 @@ module.exports.updateUser = (req, res) => {
       if (!user) {
         return res.status(400).send({ message: "Пользователь не найден." });
       }
-      res.send({ user });
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === "CastError" || err.name === "ValidationError") {
         return res.status(400).send({
-          message: "Переданы некорректные данные при создании пользователя",
+          message:
+            "Переданы некорректные данные при редактировании пользователя.",
         });
       } else {
         res.status(400).send({ message: "Ошибка сервера!" });
@@ -78,12 +76,13 @@ module.exports.updateAvatar = (req, res) => {
       if (!user) {
         return res.status(400).send({ message: "Пользователь не найден." });
       }
-      res.send({ user });
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === "CastError" || err.name === "ValidationError") {
         res.status(400).send({
-          message: "Переданы некорректные данные при создании пользователя",
+          message:
+            "Переданы некорректные данные при редактировании пользователя.",
         });
       } else {
         res.status(500).send({ message: err.message });
