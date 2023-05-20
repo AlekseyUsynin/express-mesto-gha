@@ -3,7 +3,7 @@ const UserSchema = require("../models/user");
 module.exports.getUsers = (req, res) => {
   UserSchema.find({})
     .then((users) => res.send(users))
-    .catch((err) => res.status(500).send({ message: "Ошибка сервера!" }));
+    .catch(() => res.status(500).send({ message: "Ошибка сервера!" }));
 };
 
 module.exports.getUserId = (req, res) => {
@@ -13,13 +13,13 @@ module.exports.getUserId = (req, res) => {
       if (!user) {
         return res.status(404).send({ message: "Не указано ID пользователя" });
       }
-      res.send(user);
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        return res
-          .status(400)
-          .send({ message: "Пользователь по указанному _id не найден." });
+        res.status(400).send({ message: "Переданы неверные данные." });
+      } else {
+        res.status(500).send({ message: "Ошибка сервера!" });
       }
     });
 };
@@ -32,11 +32,12 @@ module.exports.createUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        return res.status(400).send({
+        res.status(400).send({
           message: "Переданы некорректные данные при создании пользователя",
         });
+      } else {
+        res.status(500).send({ message: "Ошибка сервера!" });
       }
-      res.status(500).send({ message: "Ошибка сервера!" });
     });
 };
 
@@ -49,18 +50,18 @@ module.exports.updateUser = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        return res.status(400).send({ message: "Пользователь не найден." });
+        return res.status(404).send({ message: "Пользователь не найден." });
       }
       res.send(user);
     })
     .catch((err) => {
       if (err.name === "CastError" || err.name === "ValidationError") {
-        return res.status(400).send({
+        res.status(400).send({
           message:
             "Переданы некорректные данные при редактировании пользователя.",
         });
       } else {
-        res.status(400).send({ message: "Ошибка сервера!" });
+        res.status(500).send({ message: "Ошибка сервера!" });
       }
     });
 };
@@ -74,7 +75,7 @@ module.exports.updateAvatar = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        return res.status(400).send({ message: "Пользователь не найден." });
+        return res.status(404).send({ message: "Пользователь не найден." });
       }
       res.send(user);
     })
@@ -85,7 +86,7 @@ module.exports.updateAvatar = (req, res) => {
             "Переданы некорректные данные при редактировании пользователя.",
         });
       } else {
-        res.status(500).send({ message: err.message });
+        res.status(500).send({ message: "Ошибка сервера!" });
       }
     });
 };
