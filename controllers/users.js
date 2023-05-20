@@ -1,11 +1,11 @@
-const UserSchema = require("../models/user");
+const UserSchema = require('../models/user');
 
-const { BAD_REQUEST, NOT_FOUND, SERVER_ERROR } = require("../errors/constants");
+const { BAD_REQUEST, NOT_FOUND, SERVER_ERROR } = require('../errors/constants');
 
 module.exports.getUsers = (req, res) => {
   UserSchema.find({})
     .then((users) => res.send(users))
-    .catch(() => res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" }));
+    .catch(() => res.status(SERVER_ERROR).send({ message: 'Ошибка сервера!' }));
 };
 
 module.exports.getUserId = (req, res) => {
@@ -15,15 +15,15 @@ module.exports.getUserId = (req, res) => {
       if (!user) {
         return res
           .status(NOT_FOUND)
-          .send({ message: "Не указано ID пользователя" });
+          .send({ message: 'Не указано ID пользователя' });
       }
       return res.send(user);
     })
     .catch((err) => {
-      if (err.name === "CastError") {
-        res.status(BAD_REQUEST).send({ message: "Переданы неверные данные." });
+      if (err.name === 'CastError') {
+        res.status(BAD_REQUEST).send({ message: 'Переданы неверные данные.' });
       } else {
-        res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" });
+        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера!' });
       }
     });
 };
@@ -35,12 +35,12 @@ module.exports.createUser = (req, res) => {
       res.send({ data: user });
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === 'ValidationError') {
         res.status(BAD_REQUEST).send({
-          message: "Переданы некорректные данные при создании пользователя",
+          message: 'Переданы некорректные данные при создании пользователя',
         });
       } else {
-        res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" });
+        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера!' });
       }
     });
 };
@@ -50,24 +50,25 @@ module.exports.updateUser = (req, res) => {
   UserSchema.findByIdAndUpdate(
     req.user._id,
     { name, about },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
+    // eslint-disable-next-line consistent-return
     .then((user) => {
       if (!user) {
         return res
           .status(NOT_FOUND)
-          .send({ message: "Пользователь не найден." });
+          .send({ message: 'Пользователь не найден.' });
       }
       res.send(user);
     })
     .catch((err) => {
-      if (err.name === "CastError" || err.name === "ValidationError") {
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
         res.status(BAD_REQUEST).send({
           message:
-            "Переданы некорректные данные при редактировании пользователя.",
+            'Переданы некорректные данные при редактировании пользователя.',
         });
       } else {
-        res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" });
+        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера!' });
       }
     });
 };
@@ -77,24 +78,25 @@ module.exports.updateAvatar = (req, res) => {
   UserSchema.findByIdAndUpdate(
     req.user._id,
     { avatar },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   )
+    // eslint-disable-next-line consistent-return
     .then((user) => {
       if (!user) {
         return res
           .status(NOT_FOUND)
-          .send({ message: "Пользователь не найден." });
+          .send({ message: 'Пользователь не найден.' });
       }
       res.send(user);
     })
     .catch((err) => {
-      if (err.name === "CastError" || err.name === "ValidationError") {
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
         res.status(BAD_REQUEST).send({
           message:
-            "Переданы некорректные данные при редактировании пользователя.",
+            'Переданы некорректные данные при редактировании пользователя.',
         });
       } else {
-        res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" });
+        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера!' });
       }
     });
 };

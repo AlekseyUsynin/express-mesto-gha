@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const cardSchema = new mongoose.Schema(
   {
@@ -17,11 +17,11 @@ const cardSchema = new mongoose.Schema(
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "user",
+      ref: 'user',
     },
 
     likes: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
+      type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
       default: [],
     },
 
@@ -35,7 +35,7 @@ const cardSchema = new mongoose.Schema(
   // https://stackoverflow.com/questions/12495891/what-is-the-v-field-in-mongoose
   {
     versionKey: false,
-  }
+  },
 );
 
-module.exports = mongoose.model("card", cardSchema);
+module.exports = mongoose.model('card', cardSchema);

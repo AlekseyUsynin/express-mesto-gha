@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema(
   {
@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema(
   // https://stackoverflow.com/questions/12495891/what-is-the-v-field-in-mongoose
   {
     versionKey: false,
-  }
+  },
 );
 
-module.exports = mongoose.model("user", UserSchema);
+module.exports = mongoose.model('user', UserSchema);
