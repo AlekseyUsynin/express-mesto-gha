@@ -1,9 +1,11 @@
 const UserSchema = require("../models/user");
 
+const { BAD_REQUEST, NOT_FOUND, SERVER_ERROR } = require("../errors/constants");
+
 module.exports.getUsers = (req, res) => {
   UserSchema.find({})
     .then((users) => res.send(users))
-    .catch(() => res.status(500).send({ message: "Ошибка сервера!" }));
+    .catch(() => res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" }));
 };
 
 module.exports.getUserId = (req, res) => {
@@ -11,15 +13,17 @@ module.exports.getUserId = (req, res) => {
   UserSchema.findById(userId)
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: "Не указано ID пользователя" });
+        return res
+          .status(NOT_FOUND)
+          .send({ message: "Не указано ID пользователя" });
       }
       return res.send(user);
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        res.status(400).send({ message: "Переданы неверные данные." });
+        res.status(BAD_REQUEST).send({ message: "Переданы неверные данные." });
       } else {
-        res.status(500).send({ message: "Ошибка сервера!" });
+        res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" });
       }
     });
 };
@@ -32,11 +36,11 @@ module.exports.createUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(400).send({
+        res.status(BAD_REQUEST).send({
           message: "Переданы некорректные данные при создании пользователя",
         });
       } else {
-        res.status(500).send({ message: "Ошибка сервера!" });
+        res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" });
       }
     });
 };
@@ -50,18 +54,20 @@ module.exports.updateUser = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: "Пользователь не найден." });
+        return res
+          .status(NOT_FOUND)
+          .send({ message: "Пользователь не найден." });
       }
       res.send(user);
     })
     .catch((err) => {
       if (err.name === "CastError" || err.name === "ValidationError") {
-        res.status(400).send({
+        res.status(BAD_REQUEST).send({
           message:
             "Переданы некорректные данные при редактировании пользователя.",
         });
       } else {
-        res.status(500).send({ message: "Ошибка сервера!" });
+        res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" });
       }
     });
 };
@@ -75,18 +81,20 @@ module.exports.updateAvatar = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        return res.status(404).send({ message: "Пользователь не найден." });
+        return res
+          .status(NOT_FOUND)
+          .send({ message: "Пользователь не найден." });
       }
       res.send(user);
     })
     .catch((err) => {
       if (err.name === "CastError" || err.name === "ValidationError") {
-        res.status(400).send({
+        res.status(BAD_REQUEST).send({
           message:
             "Переданы некорректные данные при редактировании пользователя.",
         });
       } else {
-        res.status(500).send({ message: "Ошибка сервера!" });
+        res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" });
       }
     });
 };

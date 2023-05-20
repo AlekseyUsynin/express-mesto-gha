@@ -1,8 +1,13 @@
 const express = require("express");
+
 const mongoose = require("mongoose");
+
 const bodyParser = require("body-parser");
+
 const path = require("path");
+
 const userRoutes = require("./routes/users");
+
 const cardRoutes = require("./routes/cards");
 
 const { PORT = 3000 } = process.env;
@@ -12,6 +17,7 @@ const app = express();
 //static зайдет в папку public, найдет там index.html и запустит его.
 // app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Не раблотает с порта mongodb://localhost:27017
@@ -26,6 +32,11 @@ app.use((req, res, next) => {
 });
 
 app.use(userRoutes);
+
 app.use(cardRoutes);
+
+app.use((req, res) => {
+  return res.status(404).send({ message: "Такой страницы нет" });
+});
 
 app.listen(PORT, () => console.log("started!"));

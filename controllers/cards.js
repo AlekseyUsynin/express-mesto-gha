@@ -1,10 +1,13 @@
-const e = require("express");
 const CardSchema = require("../models/card");
+
+const { BAD_REQUEST, NOT_FOUND, SERVER_ERROR } = require("../errors/constants");
 
 module.exports.getCards = (req, res) => {
   CardSchema.find({})
     .then((cards) => res.send(cards))
-    .catch((err) => res.status(400).send({ message: "Ошибка сервера!" }));
+    .catch((err) =>
+      res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" })
+    );
 };
 
 module.exports.createCard = (req, res) => {
@@ -15,9 +18,9 @@ module.exports.createCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        res.status(400).send({ message: "Переданы неверные данные." });
+        res.status(BAD_REQUEST).send({ message: "Переданы неверные данные." });
       } else {
-        res.status(500).send({ message: "Ошибка сервера!" });
+        res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" });
       }
     });
 };
@@ -28,7 +31,7 @@ module.exports.deleteCard = (req, res) => {
     .then((card) => {
       if (!card) {
         return res
-          .status(404)
+          .status(NOT_FOUND)
           .send({ message: "Карточка с таким id не найдена" });
       }
       return card
@@ -37,9 +40,9 @@ module.exports.deleteCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        res.status(400).send({ message: "Переданы неверные данные." });
+        res.status(BAD_REQUEST).send({ message: "Переданы неверные данные." });
       } else {
-        res.status(500).send({ message: "Ошибка сервера!" });
+        res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" });
       }
     });
 };
@@ -53,16 +56,16 @@ module.exports.likeCard = (req, res) =>
     .then((card) => {
       if (!card) {
         return res
-          .status(404)
+          .status(NOT_FOUND)
           .send({ message: "Карточка с таким id не найдена" });
       }
       res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        res.status(400).send({ message: "Переданы неверные данные." });
+        res.status(BAD_REQUEST).send({ message: "Переданы неверные данные." });
       } else {
-        res.status(500).send({ message: "Ошибка сервера!" });
+        res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" });
       }
     });
 
@@ -75,15 +78,15 @@ module.exports.dislikeCard = (req, res) =>
     .then((card) => {
       if (!card) {
         return res
-          .status(404)
+          .status(NOT_FOUND)
           .send({ message: "Карточка с таким id не найдена" });
       }
       res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === "CastError") {
-        res.status(400).send({ message: "Переданы неверные данные." });
+        res.status(BAD_REQUEST).send({ message: "Переданы неверные данные." });
       } else {
-        res.status(500).send({ message: "Ошибка сервера!" });
+        res.status(SERVER_ERROR).send({ message: "Ошибка сервера!" });
       }
     });
