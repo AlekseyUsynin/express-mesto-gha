@@ -31,12 +31,11 @@ module.exports.deleteCard = (req, res, next) => {
       if (!card) {
         throw new NotFound('Карточка с таким id не найдена.');
       }
-      if (!card.owner.equals(req.user._id)) {
-        return next(new Forbidden('Нельзя удалить карточку другого пользователя!'));
+      if (!(req.user._id === card.owner._id)) {
+        throw new Forbidden('Нельзя удалить карточку другого пользователя!');
       }
       return card
         .deleteOne()
-        // .then(() => res.status(403).send({ message: 'Карточка удалена' }));
         .then(() => res.send({ message: 'Карточка удалена' }));
     })
     .catch((err) => {
