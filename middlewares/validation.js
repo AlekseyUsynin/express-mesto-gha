@@ -24,14 +24,27 @@ module.exports.createUserJoi = celebrate({
   }),
 });
 
-module.exports.cardJoi = celebrate({
+module.exports.cardIdJoi = celebrate({
   params: Joi.object().keys({
     cardId: Joi.string().required().hex().length(24),
   }),
 });
 
-module.exports.UserJoi = celebrate({
+module.exports.userIdJoi = celebrate({
   params: Joi.object().keys({
     userId: Joi.string().required().hex().length(24),
+  }),
+});
+
+module.exports.updateUserJoi = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30).required(),
+    about: Joi.string().min(2).max(30).required(),
+  }),
+});
+
+module.exports.updateAvatarJoi = celebrate({
+  body: Joi.object().keys({
+    avatar: Joi.string().required().custom(urlJoi),
   }),
 });
