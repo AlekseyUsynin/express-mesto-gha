@@ -23,3 +23,15 @@ module.exports.createUserJoi = celebrate({
     password: Joi.string().required(),
   }),
 });
+
+module.exports.cardJoi = celebrate({
+  params: Joi.object().keys({
+    cardId: Joi.string().required().hex().length(24),
+  }),
+});
+
+module.exports.UserJoi = celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().required().hex().length(24),
+  }),
+});
