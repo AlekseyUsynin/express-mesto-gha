@@ -12,7 +12,6 @@ module.exports.login = (req, res) => {
       res.send({ token });
     })
     .catch((err) => {
-      // ошибка аутентификации
       res
         .status(401)
         .send({ message: err.message });
@@ -25,6 +24,25 @@ module.exports.getUsers = (req, res) => {
     .catch(() => res.status(SERVER_ERROR).send({ message: 'Ошибка сервера!' }));
 };
 
+module.exports.getUser = (req, res) => {
+  UserSchema.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+        return res
+          .status(NOT_FOUND)
+          .send({ message: 'Пользователь не найден.' });
+      }
+      return res.send(user);
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(BAD_REQUEST).send({ message: 'Переданы неверные данные.' });
+      } else {
+        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера!' });
+      }
+    });
+};
+
 module.exports.getUserId = (req, res) => {
   const { userId } = req.params;
   UserSchema.findById(userId)
@@ -32,7 +50,7 @@ module.exports.getUserId = (req, res) => {
       if (!user) {
         return res
           .status(NOT_FOUND)
-          .send({ message: 'Не указано ID пользователя' });
+          .send({ message: 'Не указано ID пользователя.' });
       }
       return res.send(user);
     })
