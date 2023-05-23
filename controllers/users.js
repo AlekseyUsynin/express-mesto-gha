@@ -95,14 +95,13 @@ module.exports.updateUser = (req, res) => {
     { name, about },
     { new: true, runValidators: true },
   )
-    // eslint-disable-next-line consistent-return
     .then((user) => {
       if (!user) {
         return res
           .status(NOT_FOUND)
           .send({ message: 'Пользователь не найден.' });
       }
-      res.send(user);
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
@@ -123,14 +122,13 @@ module.exports.updateAvatar = (req, res) => {
     { avatar },
     { new: true, runValidators: true },
   )
-    // eslint-disable-next-line consistent-return
     .then((user) => {
       if (!user) {
         return res
           .status(NOT_FOUND)
           .send({ message: 'Пользователь не найден.' });
       }
-      res.send(user);
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
