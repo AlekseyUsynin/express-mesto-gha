@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const UserSchema = require('../models/user');
 const NotFound = require('../errors/NotFound');
 const BadRequest = require('../errors/BadRequest');
+const Conflict = require('../errors/Conflict');
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
@@ -67,22 +68,28 @@ module.exports.createUser = (req, res, next) => {
   const {
     name, about, email, avatar,
   } = req.body;
+
   bcrypt.hash(req.body.password, 10)
     .then((hash) => {
-      UserSchema.create({
-        name, about, avatar, email, password: hash,
-      })
+      UserSchema
+        .create({
+          name, about, avatar, email, password: hash,
+        })
         .then((user) => {
           res.send({ data: user });
         })
         .catch((err) => {
-          if (err.name === 'ValidationError') {
+          // res.send(err);
+          if (err.code === 11000) {
+            next(new Conflict('Пользователь с таким email уже есть.'));
+          } else if (err.name === 'ValidationError') {
             next(new BadRequest('Переданы некорректные данные при создании пользователя.'));
           } else {
             next(err);
           }
         });
-    });
+    })
+    .catch(next);
 };
 
 module.exports.updateUser = (req, res, next) => {
