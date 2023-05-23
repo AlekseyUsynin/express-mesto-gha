@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { errors } = require('celebrate');
 const cardRoutes = require('./routes/cards');
 const userRoutes = require('./routes/users');
 const { login, createUser } = require('./controllers/users');
@@ -25,6 +26,7 @@ app.post('/signup', createUserJoi, createUser);
 app.use(auth);
 app.use(userRoutes);
 app.use(cardRoutes);
+app.use(errors());
 
 app.use((req, res, next) => {
   next(new NotFound('Такой страницы нет.'));
