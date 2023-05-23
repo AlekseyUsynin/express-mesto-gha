@@ -50,7 +50,7 @@ const UserSchema = new mongoose.Schema(
 
 // eslint жалуется на безымянную функцию, использую function _(), решение с https://stackoverflow.com/questions/52735032/warning-unexpected-unnamed-function-func-names-under-eslint-rule
 UserSchema.statics.findUserByCredentials = function _(email, password) {
-  return this.findOne({ email })
+  return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
         return Promise.reject(new Error('Неправильные почта или пароль'));
