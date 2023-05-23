@@ -6,6 +6,7 @@ const userRoutes = require('./routes/users');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFound = require('./errors/NotFound');
+const { loginJoi, createUserJoi } = require('./middlewares/validation');
 
 const { PORT = 3000 } = process.env;
 
@@ -18,8 +19,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // решение: https://www.mongodb.com/community/forums/t/mongooseserverselectionerror-connect-econnrefused-127-0-0-1-27017/123421/2
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
-app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signin', loginJoi, login);
+app.post('/signup', createUserJoi, createUser);
 
 app.use(auth);
 app.use(userRoutes);
