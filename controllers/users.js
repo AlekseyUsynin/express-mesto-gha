@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
-const UserSchema = require('../models/user');
+const bcrypt = require('bcryptjs');
 
+const UserSchema = require('../models/user');
 const { BAD_REQUEST, NOT_FOUND, SERVER_ERROR } = require('../errors/constants');
 
 module.exports.login = (req, res) => {
@@ -64,19 +65,26 @@ module.exports.getUserId = (req, res) => {
 };
 
 module.exports.createUser = (req, res) => {
-  const { name, about, avatar, email, password } = req.body;
-  UserSchema.create({ name, about, avatar })
-    .then((user) => {
-      res.send({ data: user });
-    })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(BAD_REQUEST).send({
-          message: 'Переданы некорректные данные при создании пользователя',
+  const {
+    name, about, email, avatar,
+  } = req.body;
+  bcrypt.hash(req.body.password, 10)
+    .then((hash) => {
+      UserSchema.create({
+        name, about, avatar, email, password: hash,
+      })
+        .then((user) => {
+          res.send({ data: user });
+        })
+        .catch((err) => {
+          if (err.name === 'ValidationError') {
+            res.status(BAD_REQUEST).send({
+              message: 'Переданы некорректные данные при создании пользователя',
+            });
+          } else {
+            res.status(SERVER_ERROR).send({ message: 'Ошибка сервера!' });
+          }
         });
-      } else {
-        res.status(SERVER_ERROR).send({ message: 'Ошибка сервера!' });
-      }
     });
 };
 
