@@ -77,7 +77,7 @@ module.exports.createUser = (req, res, next) => {
         })
         .then(() => {
           res.send({
-            data: name, about, avatar, email,
+            name, about, avatar, email,
           });
         })
         .catch((err) => {
