@@ -1,13 +1,12 @@
 const jwt = require('jsonwebtoken');
+const Unauthorized = require('../errors/Unauthorized');
 
 module.exports = (req, res, next) => {
   // достаём авторизационный заголовок
   const { authorization } = req.headers;
   // убеждаемся, что он есть или начинается с Bearer
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    return res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+    throw new Unauthorized('Необходима авторизация!');
   }
 
   // извлечём токен
@@ -19,9 +18,7 @@ module.exports = (req, res, next) => {
     payload = jwt.verify(token, 'fire');
   } catch (err) {
     // отправим ошибку, если не получилось
-    return res
-      .status(401)
-      .send({ message: 'Необходима авторизация' });
+    throw new Unauthorized('Необходима авторизация!');
   }
 
   req.user = payload; // записываем пейлоуд в объект запроса
