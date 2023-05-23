@@ -24,6 +24,13 @@ module.exports.createUserJoi = celebrate({
   }),
 });
 
+module.exports.createCardJoi = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().required().min(2).max(30),
+    link: Joi.string().required().custom(urlJoi),
+  }),
+});
+
 module.exports.cardIdJoi = celebrate({
   params: Joi.object().keys({
     cardId: Joi.string().required().hex().length(24),
