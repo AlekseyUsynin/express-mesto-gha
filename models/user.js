@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema(
 
     avatar: {
       type: String,
-      default: 'https://avatars.dzeninfra.ru/get-zen_doc/230574/pub_5c5fcd9b8e5f1300ac3d0c72_5c5fcda1265ca800ac0f55d6/scale_2400',
+      default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
       validate: {
         validator: (url) => validator.isURL(url),
         message: 'Неверный email',
