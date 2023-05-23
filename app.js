@@ -1,13 +1,10 @@
 const express = require('express');
-
 const mongoose = require('mongoose');
-
 const bodyParser = require('body-parser');
-
-const userRoutes = require('./routes/users');
-
 const cardRoutes = require('./routes/cards');
-
+const userRoutes = require('./routes/users');
+const { login, createUser } = require('./controllers/users');
+const auth = require('./middlewares/auth');
 const { NOT_FOUND } = require('./errors/constants');
 
 const { PORT = 3000 } = process.env;
@@ -32,8 +29,12 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(userRoutes);
+app.post('/signin', login);
+app.post('/signup', createUser);
 
+app.use(auth);
+
+app.use(userRoutes);
 app.use(cardRoutes);
 
 app.use((req, res) => {

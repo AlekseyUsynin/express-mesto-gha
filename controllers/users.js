@@ -1,6 +1,23 @@
+const jwt = require('jsonwebtoken');
 const UserSchema = require('../models/user');
 
 const { BAD_REQUEST, NOT_FOUND, SERVER_ERROR } = require('../errors/constants');
+
+module.exports.login = (req, res) => {
+  const { email, password } = req.body;
+
+  return UserSchema.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, 'fire', { expiresIn: '7d' });
+      res.send({ token });
+    })
+    .catch((err) => {
+      // ошибка аутентификации
+      res
+        .status(401)
+        .send({ message: err.message });
+    });
+};
 
 module.exports.getUsers = (req, res) => {
   UserSchema.find({})
@@ -29,7 +46,7 @@ module.exports.getUserId = (req, res) => {
 };
 
 module.exports.createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
+  const { name, about, avatar, email, password } = req.body;
   UserSchema.create({ name, about, avatar })
     .then((user) => {
       res.send({ data: user });
