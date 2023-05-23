@@ -5,29 +5,18 @@ const cardRoutes = require('./routes/cards');
 const userRoutes = require('./routes/users');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
-const { NOT_FOUND } = require('./errors/constants');
+const NotFound = require('./errors/NotFound');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
-// static зайдет в папку public, найдет там index.html и запустит его.
-// app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
-
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Не раблотает с порта mongodb://localhost:27017
 // решение: https://www.mongodb.com/community/forums/t/mongooseserverselectionerror-connect-econnrefused-127-0-0-1-27017/123421/2
-// eslint-disable-next-line quotes
-mongoose.connect("mongodb://127.0.0.1:27017/mestodb");
-
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: '646632f4bb035b45c83142d0', // _id пользователя
-//   };
-//   next();
-// });
+mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 app.post('/signin', login);
 app.post('/signup', createUser);
@@ -37,8 +26,16 @@ app.use(auth);
 app.use(userRoutes);
 app.use(cardRoutes);
 
-app.use((req, res) => {
-  res.status(NOT_FOUND).send({ message: 'Такой страницы нет' });
+app.use((req, res, next) => {
+  next(new NotFound('Такой страницы нет.'));
 });
+
+module.exports = (err, req, res, next) => {
+  const { status = 500, message } = err;
+  res.status(status).send({
+    message: status === 500 ? 'Ошибка сервера!' : message,
+  });
+  next();
+};
 
 app.listen(PORT);
