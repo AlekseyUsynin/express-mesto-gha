@@ -1,6 +1,7 @@
 const CardSchema = require('../models/card');
 const NotFound = require('../errors/NotFound');
 const BadRequest = require('../errors/BadRequest');
+const Forbidden = require('../errors/Forbidden');
 
 module.exports.getCards = (req, res, next) => {
   CardSchema.find({})
@@ -29,6 +30,9 @@ module.exports.deleteCard = (req, res, next) => {
     .then((card) => {
       if (!card) {
         throw new NotFound('Карточка с таким id не найдена.');
+      }
+      if (!card.owner.equals(req.user._id)) {
+        return next(new Forbidden('Нельзя удалить карточку другого пользователя!'));
       }
       return card
         .deleteOne()
