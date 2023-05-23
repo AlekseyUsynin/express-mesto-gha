@@ -22,7 +22,6 @@ app.post('/signin', login);
 app.post('/signup', createUser);
 
 app.use(auth);
-
 app.use(userRoutes);
 app.use(cardRoutes);
 
