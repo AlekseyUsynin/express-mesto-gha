@@ -75,8 +75,10 @@ module.exports.createUser = (req, res, next) => {
         .create({
           name, about, avatar, email, password: hash,
         })
-        .then((user) => {
-          res.send({ data: user });
+        .then(() => {
+          res.send({
+            data: name, about, avatar, email,
+          });
         })
         .catch((err) => {
           if (err.code === 11000) {
