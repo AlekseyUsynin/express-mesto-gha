@@ -8,6 +8,7 @@ const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const NotFound = require('./errors/NotFound');
 const { loginJoi, createUserJoi } = require('./middlewares/validation');
+const errorCenter = require('./middlewares/errorCenter');
 
 const { PORT = 3000 } = process.env;
 
@@ -32,13 +33,6 @@ app.use((req, res, next) => {
   next(new NotFound('Такой страницы нет.'));
 });
 
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-  res.status(statusCode)
-    .send({
-      message: statusCode === 500 ? 'Ошибка сервера!' : message,
-    });
-  next();
-});
+app.use(errorCenter);
 
 app.listen(PORT);
